@@ -33,6 +33,7 @@ require("./app/routes/user.routes")(app);
 require("./app/routes/category.routes")(app);
 require("./app/routes/profile.routes")(app);
 require("./app/routes/products.routes")(app);
+require("./app/routes/model.routes")(app);
 require("./app/routes/latestupdate.routes")(app);
 require("./app/routes/achievements.routes")(app);
 

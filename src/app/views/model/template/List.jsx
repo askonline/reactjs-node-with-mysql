@@ -14,7 +14,7 @@ import {
   import { Link } from "react-router-dom";
   import { SimpleCard } from 'app/components'
   import { makeStyles } from '@material-ui/core/styles'
-  import { getAllCategory,deleteCategory} from './TableService'
+  import { getAllModel,deletemodel} from './TableService'
   import MUIDataTable from 'mui-datatables'
   import { useNavigate } from "react-router-dom";
 
@@ -24,32 +24,32 @@ import {
   }));
   
   const EditForm = () => {
-    const [categoryList, setCategoryList] = useState([])
+    const [modelList, setModelList] = useState([])
     const navigate = useNavigate();
     const columns = [
         {
-            name: 'name', // field name in the row object
+            name: 'parent_category_id', // field name in the row object
             label: 'Category', // column title that will be shown in table
             options: {
                 filter: true,
             },
         },
         {
-            name: 'subcategory', // field name in the row object
+            name: 'parent_id', // field name in the row object
             label: 'Sub Category', // column title that will be shown in table
             options: {
                 filter: true,
             },
         },
         {
-            name: 'product', // field name in the row object
+            name: 'sub_category_id', // field name in the row object
             label: 'Product', // column title that will be shown in table
             options: {
                 filter: true,
             },
         },
         {
-            name: 'modelno', // field name in the row object
+            name: 'model_number', // field name in the row object
             label: 'Model No', // column title that will be shown in table
             options: {
                 filter: true,
@@ -61,7 +61,7 @@ import {
             options: {
                 filter: true,
                 customBodyRenderLite: (dataIndex) => {
-                    let getStatus = categoryList[dataIndex].status
+                    let getStatus = modelList[dataIndex].status
                     if (getStatus == '1')
                         return (
                             <small className="text-white bg-error border-radius-4 px-2 py-2px">
@@ -86,11 +86,11 @@ import {
                 customBodyRenderLite: (dataIndex) => (
                     <div className="flex items-center">
                       <div className="flex-grow"></div>
-                    <Link to={`/model/edit/${categoryList[dataIndex].id}`}> <Icon fontSize="" color="primary" title="Edit">edit</Icon></Link>
+                    <Link to={`/model/edit/${modelList[dataIndex].id}`}> <Icon fontSize="" color="primary" title="Edit">edit</Icon></Link>
                     
                    
                     <Button  type="submit" 
-                    onClick={() => handleDelete(categoryList[dataIndex].id)} >
+                    onClick={() => handleDelete(modelList[dataIndex].id)} >
                          <Icon fontSize="" color="error" title="Delete">delete</Icon>
                     </Button>
 
@@ -103,20 +103,20 @@ import {
         },
     ]
     const handleDelete = (id) => {
-        //console.log('delete',id)
-        deleteCategory(id)
-        navigate('/category/list');
+        console.log('delete',id)
+       // deletemodel(id)
+       // navigate('/category/list');
        };
 
     /* ----------------- Get Category Id */
-    const getCategoryData = () => {
-        getAllCategory().then(({ data }) => {
-            setCategoryList(data)
+    const getModelData = () => {
+        getAllModel().then(({ data }) => {
+            setModelList(data)
         })
         }
     
         useEffect(() => {
-            getCategoryData()
+            getModelData()
         }, [])
     
   
@@ -135,8 +135,8 @@ import {
     return (
       <div>
         <MUIDataTable
-                title={ <h3> <Link to="/category/add" > <Icon fontSize="large" title="Add New">add</Icon></Link></h3> }
-                data={categoryList}
+                title={ <h3> <Link to="/model/add" > <Icon fontSize="large" title="Add New">add</Icon></Link></h3> }
+                data={modelList}
                 columns={columns}
                 options={{
                     filterType: 'textField',

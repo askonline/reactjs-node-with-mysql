@@ -14,7 +14,10 @@ const productsRoutes = [
     path: '/model/add',
     element: <ModelAdd />,
   },
- 
+  {
+    path: '/model/edit/:id',
+    element: <ModelAdd />,
+  },
   
 ];
 

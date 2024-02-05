@@ -52,11 +52,6 @@ const AddProductForm = () => {
   
 
   //---------------------- Start Subcategory
-  const changeSelectOptionHandler = (event) => { 
-    setSelected(event.target.value); 
-    
-  };
-  
   console.log("===",selected)
   const getSubCategoryByCategoryId = () => {
     findSubCategoryByCategoryId(4).then(({ data }) => {
