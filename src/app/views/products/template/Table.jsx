@@ -7,16 +7,20 @@ import {
     Radio,
     RadioGroup,
     styled,
+    Avatar,
+    Box,
   } from "@mui/material";
-  import { Span } from "app/components/Typography";
   import { useEffect, useState } from "react";
   import { TextValidator, ValidatorForm } from "react-material-ui-form-validator";
-  import { Link } from "react-router-dom";
-  import { SimpleCard } from 'app/components'
+  import { Link,useNavigate } from "react-router-dom";
   import { makeStyles } from '@material-ui/core/styles'
-  import { getAllCategory,deleteCategory} from './TableService'
+  import { getAllProducts,deleteProduct} from './TableService'
   import MUIDataTable from 'mui-datatables'
-  import { useNavigate } from "react-router-dom";
+  import { Paragraph } from 'app/components/Typography';
+  import {  ConfirmationDialog } from 'app/components'
+
+
+
 
   const TextField = styled(TextValidator)(() => ({
     width: "100%",
@@ -24,46 +28,63 @@ import {
   }));
   
   const ProductList = () => {
-    const [categoryList, setCategoryList] = useState([])
+    const [productsList, setProductList] = useState([])
+    const [products, setProduct] = useState(null)
+
     const navigate = useNavigate();
+    const [
+        shouldOpenConfirmationDialog,
+        setShouldOpenConfirmationDialog,
+    ] = useState(false)
+   
     const columns = [
         {
-            name: 'name', // field name in the row object
+            name: 'parent_cat_id', // field name in the row object
             label: 'Category', // column title that will be shown in table
             options: {
                 filter: true,
             },
         },
         {
-            name: 'subcategory', // field name in the row object
+            name: 'parent_id', // field name in the row object
             label: 'Sub Category', // column title that will be shown in table
             options: {
                 filter: true,
             },
         },
         {
-            name: 'product', // field name in the row object
+            name: 'name', // field name in the row object
             label: 'Product', // column title that will be shown in table
             options: {
                 filter: true,
             },
         },
         {
-            name: 'image', // field name in the row object
+            name: 'imaged', // field name in the row object
             label: 'Image', // column title that will be shown in table
             options: {
                 filter: true,
+                customBodyRenderLite: (dataIndex) => {
+                    let getfeature_image = productsList[dataIndex].feature_image
+                    if (getfeature_image)
+                        return (
+                    <Box display="flex" alignItems="center">
+                    <Avatar src={`https://akoninc.com/demo/assets/uploads/thumbs/category/${productsList[dataIndex].feature_image}`} />
+                    </Box>
+                        )
+                    
+                },
             },
         },
         {
-            name: 'crdate', // field name in the row object
+            name: 'created_date', // field name in the row object
             label: 'Created', // column title that will be shown in table
             options: {
                 filter: true,
             },
         },
         {
-            name: 'modify', // field name in the row object
+            name: 'Modified_date', // field name in the row object
             label: 'Modified', // column title that will be shown in table
             options: {
                 filter: true,
@@ -75,7 +96,7 @@ import {
             options: {
                 filter: true,
                 customBodyRenderLite: (dataIndex) => {
-                    let getStatus = categoryList[dataIndex].status
+                    let getStatus = productsList[dataIndex].status
                     if (getStatus == '1')
                         return (
                             <small className="text-white bg-error border-radius-4 px-2 py-2px">
@@ -100,13 +121,14 @@ import {
                 customBodyRenderLite: (dataIndex) => (
                     <div className="flex items-center">
                       <div className="flex-grow"></div>
-                    <Link to={`/product/edit/${categoryList[dataIndex].id}`}> <Icon fontSize="" color="primary" title="Edit">edit</Icon></Link>
+                    <Link to={`/product/edit/${productsList[dataIndex].id}`}> <Icon fontSize="" color="primary" title="Edit">edit</Icon></Link>
                     
                    
                     <Button  type="submit" 
-                    onClick={() => handleDelete(categoryList[dataIndex].id)} >
+                    onClick={() => handleDelete(productsList[dataIndex].id)} >
                          <Icon fontSize="" color="error" title="Delete">delete</Icon>
                     </Button>
+                  
 
                     
                     </div>
@@ -116,21 +138,33 @@ import {
             },
         },
     ]
-    const handleDelete = (id) => {
-        //console.log('delete',id)
-        deleteCategory(id)
-        navigate('/category/list');
-       };
+    
+    const handleDialogClose = () => {
+        setShouldOpenConfirmationDialog(false)
+       
+    }
 
+    const handleDelete = (products) => {
+        //console.log('delete',id)
+        setProduct(products)
+        setShouldOpenConfirmationDialog(true)
+        //navigate('/product/list');
+       };
+       const handleConfirmationResponse = () => {
+        deleteProduct(products).then(() => {
+            handleDialogClose()
+            
+        })
+    }
     /* ----------------- Get Category Id */
-    const getCategoryData = () => {
-        getAllCategory().then(({ data }) => {
-            setCategoryList(data)
+    const getProductsData = () => {
+        getAllProducts().then(({ data }) => {
+            setProductList(data)
         })
         }
     
         useEffect(() => {
-            getCategoryData()
+            getProductsData()
         }, [])
     
   
@@ -150,7 +184,7 @@ import {
       <div>
         <MUIDataTable
                 title={ <h3> <Link to="/product/add" > <Icon fontSize="large" title="Add New">add</Icon></Link></h3> }
-                data={categoryList}
+                data={productsList}
                 columns={columns}
                 options={{
                     filterType: 'textField',
@@ -167,6 +201,14 @@ import {
                     
                 }}
             />
+            {shouldOpenConfirmationDialog && (
+                    <ConfirmationDialog
+                        open={shouldOpenConfirmationDialog}
+                        onConfirmDialogClose={handleDialogClose}
+                        onYesClick={handleConfirmationResponse}
+                        text="Are you sure to delete?"
+                    />
+                )}
       </div>
     );
   };

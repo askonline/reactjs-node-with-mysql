@@ -14,6 +14,7 @@ module.exports = function(app) {
   app.get('/api/v1/category/delete/:catId', categorycontroller.delete);
   app.post('/api/v1/category/update/:catId', categorycontroller.updateCategory);
   app.get('/api/v1/subcategory/list', categorycontroller.findSubCategoryList);
+  app.get('/api/v1/subcategorybycategory/:catId', categorycontroller.findSubCategoryByCategoryid);
 };
 
 

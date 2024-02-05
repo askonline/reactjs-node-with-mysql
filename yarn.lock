@@ -10376,6 +10376,13 @@ react-refresh@^0.8.3:
   resolved "https://registry.npmjs.org/react-refresh/-/react-refresh-0.8.3.tgz"
   integrity sha512-X8jZHc7nCMjaCqoU+V2I0cOhNW+QMBwSUkeXnTi8IPe6zaRWfn60ZzvFDZqWPfmSJfjub7dDW1SP0jaHWLu/hg==
 
+react-responsive-select@^7.0.4:
+  version "7.0.4"
+  resolved "https://registry.npmjs.org/react-responsive-select/-/react-responsive-select-7.0.4.tgz"
+  integrity sha512-MMeOgj4DWbenXAW/K7Lc0+Z2l5EjyUb3ZqkcVZq9/q9iUud88nINTHY0Y3mXZNLPosfHFt29jBRhVWgDmBMWPg==
+  dependencies:
+    singleline "^2.0.0"
+
 react-router-dom@^6.0.2:
   version "6.21.1"
   resolved "https://registry.npmjs.org/react-router-dom/-/react-router-dom-6.21.1.tgz"
@@ -11344,6 +11351,11 @@ simple-swizzle@^0.2.2:
   integrity sha512-JA//kQgZtbuY83m+xT+tXJkmJncGMTFT+C+g2h2R9uxkYIrE2yy9sgmcLhCnw57/WSD+Eh3J97FPEDFnbXnDUg==
   dependencies:
     is-arrayish "^0.3.1"
+
+singleline@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.npmjs.org/singleline/-/singleline-2.0.0.tgz"
+  integrity sha512-PJr/kx5KBJEvQ8g7+lO2P1YwCta9yx7h8vot4IcCCZJ96ucNBKJnQZKYxEtamRwmOEUN11fJe5r/3/mNFMyoOQ==
 
 sisteransi@^1.0.5:
   version "1.0.5"

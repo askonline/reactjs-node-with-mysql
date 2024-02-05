@@ -19,31 +19,29 @@ import {
   import { useEffect, useState } from "react";
   import { Link } from "react-router-dom";
   
-  import { getAllSubCategory,getAllCategory,findOneCategory,addCategory,updateCategory} from './TableService'
+  import { getAllSubCategory,getAllCategory,findOneCategory,addCategory,updateCategory,findSubCategoryByCategoryId} from './TableService'
   import * as yup from 'yup'
   import { useParams,useNavigate } from "react-router-dom";
-
- 
+  import { Select, CaretIcon, ModalCloseButton } from 'react-responsive-select';
+  import 'react-responsive-select/dist/react-responsive-select.css';
 const AddProductForm = () => {
   const [state, setState] = useState({ date: new Date() });
   const [subcategoryList, setSubCategoryList] = useState([])
   const [categoryList, setCategoryList] = useState([])
+  const [subcategoryByCategoryList, setSubcategoryByCategoryList] = useState([])
+  const [subcategoryByCategoryList1, setSubcategoryByCategoryList1] = useState([])
+  const [subcategoryByCategoryList7, setSubcategoryByCategoryList7] = useState([])
   const navigate = useNavigate();
   const { id } = useParams();
   const [findOne, setfindOne] = useState([])
-  
-
-  
-
+  const [selected, setSelected] = useState([4]); 
+ 
   const getCategoryData = () => {
     getAllCategory().then(({ data }) => {
         setCategoryList(data)
     })
     }
 
-    useEffect(() => {
-        getCategoryData()
-    }, [])
 
     const getSubCategoryData = () => {
       getAllSubCategory().then(({ data }) => {
@@ -51,11 +49,50 @@ const AddProductForm = () => {
       })
       }
 
-    useEffect(() => {
-      getSubCategoryData()
-  }, [])
-    
   
+
+  //---------------------- Start Subcategory
+  const changeSelectOptionHandler = (event) => { 
+    setSelected(event.target.value); 
+    
+  };
+  
+  console.log("===",selected)
+  const getSubCategoryByCategoryId = () => {
+    findSubCategoryByCategoryId(4).then(({ data }) => {
+      setSubcategoryByCategoryList(data)
+    })
+    findSubCategoryByCategoryId(1).then(({ data }) => {
+      setSubcategoryByCategoryList1(data)
+    })
+    findSubCategoryByCategoryId(7).then(({ data }) => {
+      setSubcategoryByCategoryList7(data)
+    })
+    
+    }
+
+  let datatype=null;
+  if(selected==1)
+  { 
+    datatype = subcategoryByCategoryList1; 
+  }
+  else if(selected==7)
+  { 
+    datatype = subcategoryByCategoryList7; 
+  }
+  else
+  { 
+    datatype = subcategoryByCategoryList; 
+  }
+  
+  //---------------------- End Subcategory
+   /* ----------------- Get Category Id */
+   const findOneCategoryData = () => {
+    findOneCategory(id).then(({ data }) => {
+      setfindOne(data)
+    })
+    }
+
     const handleSubmit = async (values, { isSubmitting }) => {
         console.log("==",values)
         const formData = new FormData();
@@ -74,18 +111,8 @@ const AddProductForm = () => {
             navigate('/subcategory/list');*/
     }
 
-    /* ----------------- Get Category Id */
-  const findOneCategoryData = () => {
-    findOneCategory(id).then(({ data }) => {
-      setfindOne(data)
-    })
-    }
+  
 
-    useEffect(() => {
-      findOneCategoryData()
-    }, [])
-
- 
     const initialValues = {
       categoryid:'',
       subcat: '',
@@ -97,6 +124,12 @@ const AddProductForm = () => {
     }
     
     //console.log("===",findOne)
+    useEffect(() => {
+      getSubCategoryByCategoryId()
+      getCategoryData()
+      getSubCategoryData()
+      findOneCategoryData()
+    }, [])
 
     return (
         <div className="m-sm-30">
@@ -118,7 +151,20 @@ const AddProductForm = () => {
                     <form className="p-4" onSubmit={handleSubmit}>
                       <Grid container spacing={3}>
                         <Grid item sm={6} xs={12}>
-                       
+                        <select onChange={e => setSelected(e.target.value)} style={{ 
+                          padding:"8px",
+                          margin: "0px",
+                          width: "724px" 
+                        }} name='categoryid' 
+                        value={findOne.parent_cat_id}
+                        required> 
+                        <option value={''}>Select Category</option>
+                        {categoryList.map((citem, ind) => (
+                          <option value={citem.id} >{citem.name}</option>
+                          ))}
+                        </select> 
+               
+                            {/*
                             <TextField
                                 className="min-w-188"
                                 label="Select Category"
@@ -139,9 +185,10 @@ const AddProductForm = () => {
                                         {item.name}
                                     </MenuItem>
                                 ))}
-                            </TextField>
+                            </TextField> */}
                     </Grid>
                     <Grid item sm={6} xs={12}>
+                            
                             <TextField
                                 className="min-w-188"
                                 label="Select Sub Category"
@@ -149,7 +196,7 @@ const AddProductForm = () => {
                                 size="small"
                                 variant="outlined"
                                 select
-                                value={values.subcat || ''}
+                                value={values.subcat || findOne.parent_id}
                                 onChange={handleChange}
                                 fullWidth
                                 error={Boolean(
@@ -157,9 +204,9 @@ const AddProductForm = () => {
                                 )}
                                 helperText={touched.subcat && errors.subcat}
                             >
-                                {categoryList.map((item, ind) => (
-                                    <MenuItem value={item.id} key={item.id}>
-                                        {item.name}
+                                {datatype.map((sitem, ind) => (
+                                    <MenuItem value={sitem.id} key={sitem.id}>
+                                        {sitem.name}
                                     </MenuItem>
                                 ))}
                             </TextField>
@@ -184,7 +231,7 @@ const AddProductForm = () => {
                         type="text"
                         name="url"
                         id="standard-basic"
-                        value={values.url || ''}
+                        value={values.url || findOne.url}
                         fullWidth
                         onChange={handleChange}
                         label="URL"
@@ -203,7 +250,7 @@ const AddProductForm = () => {
                               multiline
                               rows={4}
                               fullWidth
-                              value={values.feature_highlight || ''}
+                              value={values.feature_highlight || findOne.feature_description}
                               onChange={handleChange}
                               error={Boolean(
                                 touched.feature_highlight && errors.feature_highlight
@@ -217,7 +264,8 @@ const AddProductForm = () => {
                             control={
                               <Checkbox checked={state.new} 
                                 onChange={handleChange('new')} 
-                                value="New" 
+                                name='productnew'
+                                value={values.producttype || findOne.new_product} 
                                 color="primary"/>
                             }
                             label="New"
@@ -227,7 +275,8 @@ const AddProductForm = () => {
                               <Checkbox
                                 checked={state.featured}
                                 onChange={handleChange('featured')}
-                                value="Featured"
+                                name='productfeature'
+                                value={values.productfeature || findOne.new_product} 
                                 color="primary"
                               />
                             }
@@ -241,7 +290,7 @@ const AddProductForm = () => {
                           row
                           name="specification_table"
                           sx={{ mb: 2 }}
-                          value={values.specification_table || 0}
+                          value={values.specification_table || Number(findOne.menu_type)}
                           onChange={handleChange}
                         >
                           <FormControlLabel
@@ -295,7 +344,7 @@ const AddProductForm = () => {
                           type="text"
                           name="datasheetno"
                           id="standard-datasheet"
-                          value={values.datasheetno || ''}
+                          value={values.datasheetno || findOne.datasheet_no}
                           fullWidth
                           onChange={handleChange}
                           label=""
@@ -311,7 +360,7 @@ const AddProductForm = () => {
                           type="text"
                           name="datasheetrevno"
                           id="standard-datasheetrevno"
-                          value={values.datasheetrevno || ''}
+                          value={values.datasheetrevno || findOne.ds_rev_no}
                           fullWidth
                           onChange={handleChange}
                           label=""
@@ -330,7 +379,7 @@ const AddProductForm = () => {
                           multiline
                           rows={4}
                           fullWidth
-                          value={values.description}
+                          value={values.description || findOne.description}
                           onChange={handleChange}
                       />
                   </Grid>         
@@ -577,13 +626,13 @@ const AddProductForm = () => {
 }
 
 const subCategorySchema = yup.object().shape({
-    /*categoryid: yup.number().required('Category is required'),
-    subcat: yup.number().required('Select Subcategory is required'),
+//    categoryid: yup.number().required('Category is required'),
+   subcat: yup.number().required('Select Subcategory is required'),
     projectname: yup.string().required('Prodect name is required'),
     url: yup.string().required('URL is required'),
     feature_highlight: yup.string().required('Feature highlight is required'),
     datasheetno: yup.string().required('Data sheet no is required'),
-    datasheetrevno: yup.string().required('Data sheet revison no is required'),*/
+    datasheetrevno: yup.string().required('Data sheet revison no is required'),
     //status: yup.number().required('Status is required'),
     
 })

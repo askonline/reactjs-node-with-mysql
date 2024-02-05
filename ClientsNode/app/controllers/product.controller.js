@@ -1,8 +1,8 @@
 const db = require("../models");
-const Category = db.category;
+const Products = db.products;
 const sql = require("../config/db");
 
-
+/*
 module.exports.addcategory = async (request, response, next) => {
     try {
        
@@ -58,13 +58,13 @@ module.exports.updateCategory = async (request, response, next) => {
     } catch (error) {
         response.status(400).send({ success: false, message: error.message });
     }
-}
+}*/
 //-------------------- Get All Record For Category
 module.exports.findAll = async (request, response, next) => {
     
     try {
         //console.log(Category)
-        let category = sql.query('select id,parent_id,name,status from category_usa where parent_id=0 order by id DESC', (err, res) => {
+        let products = sql.query("SELECT * FROM `category_usa` WHERE `tree_level` >= '1' AND `parent_id` != '0' AND `parent_id` != '1' AND `parent_id` != '4' AND `parent_id` != '7' AND `parent_cat_id` != '' ORDER BY `cat_order` ASC", (err, res) => {
                 if (err) throw err;
                 response.json(res);
             });
@@ -125,21 +125,6 @@ module.exports.findSubCategoryList = async (request, response, next) => {
     }
 }
 
-//----------------- Find Sub Category List By Category Id
-module.exports.findSubCategoryByCategoryid = async (request, response, next) => {
-    let categoryId=request.params.catId;
-    try {
-       sql.query(`select id,parent_id,name,status from category_usa where parent_id!=0 AND parent_id=${categoryId} order by id DESC`, (err, res) => {
-            if (err) {
-               response.send({ err,status:false });
-              return;
-            }
-            response.json(res);
-        });
-    } catch (error) {
-        response.status(400).send({ success: false, message: error.message });
-    }
-}
 
 
 
