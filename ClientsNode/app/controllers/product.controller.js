@@ -110,10 +110,26 @@ module.exports.delete = async (request, response, next) => {
 
 
 //----------------- Find Sub Category List
-module.exports.findSubCategoryList = async (request, response, next) => {
+module.exports.findProductBySubcategoryList = async (request, response, next) => {
     
     try {
-       sql.query(`select id,parent_id,name,status from category_usa where parent_id!=0 order by id DESC`, (err, res) => {
+       sql.query(`SELECT id as value ,name as label FROM category_usa WHERE parent_id =  ${request.params.sId}  AND status = '1' ORDER BY id ASC`, (err, res) => {
+            if (err) {
+               response.send({ err,status:false });
+              return;
+            }
+            response.json(res);
+        });
+    } catch (error) {
+        response.status(400).send({ success: false, message: error.message });
+    }
+}
+
+//----------------- Get All Variable List
+module.exports.getAllVariableList = async (request, response, next) => {
+    
+    try {
+       sql.query(`SELECT id,variable_name FROM variable_usa WHERE status = '1' ORDER BY variable_name ASC`, (err, res) => {
             if (err) {
                response.send({ err,status:false });
               return;

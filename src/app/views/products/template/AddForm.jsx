@@ -9,7 +9,6 @@ import {
     Icon,
     Radio,
     RadioGroup,
-    MenuItem,
     Divider,
     Checkbox
     
@@ -19,69 +18,31 @@ import {
   import { useEffect, useState } from "react";
   import { Link } from "react-router-dom";
   
-  import { getAllSubCategory,getAllCategory,findOneCategory,addCategory,updateCategory,findSubCategoryByCategoryId} from './TableService'
+  import { findOneCategory,addCategory,updateCategory} from './TableService'
   import * as yup from 'yup'
   import { useParams,useNavigate } from "react-router-dom";
-  import { Select, CaretIcon, ModalCloseButton } from 'react-responsive-select';
   import 'react-responsive-select/dist/react-responsive-select.css';
+  import CategoryDropdown from './CategoryDropdown';
+  import SubcategoryDropdown from './SubcategoryDropdown';
+
 const AddProductForm = () => {
   const [state, setState] = useState({ date: new Date() });
-  const [subcategoryList, setSubCategoryList] = useState([])
-  const [categoryList, setCategoryList] = useState([])
-  const [subcategoryByCategoryList, setSubcategoryByCategoryList] = useState([])
-  const [subcategoryByCategoryList1, setSubcategoryByCategoryList1] = useState([])
-  const [subcategoryByCategoryList7, setSubcategoryByCategoryList7] = useState([])
+  
   const navigate = useNavigate();
   const { id } = useParams();
   const [findOne, setfindOne] = useState([])
-  const [selected, setSelected] = useState([4]); 
- 
-  const getCategoryData = () => {
-    getAllCategory().then(({ data }) => {
-        setCategoryList(data)
-    })
-    }
-
-
-    const getSubCategoryData = () => {
-      getAllSubCategory().then(({ data }) => {
-        setSubCategoryList(data)
-      })
-      }
-
   
+  const [selectedCategory, setSelectedCategory] = useState("");
 
-  //---------------------- Start Subcategory
-  console.log("===",selected)
-  const getSubCategoryByCategoryId = () => {
-    findSubCategoryByCategoryId(4).then(({ data }) => {
-      setSubcategoryByCategoryList(data)
-    })
-    findSubCategoryByCategoryId(1).then(({ data }) => {
-      setSubcategoryByCategoryList1(data)
-    })
-    findSubCategoryByCategoryId(7).then(({ data }) => {
-      setSubcategoryByCategoryList7(data)
-    })
+  const handleCategoryChange = (category) => {
+    setSelectedCategory(category);
+  }; 
+
+  const handleSubcategoryChange = (subcategory) => {
     
-    }
+  };
+ 
 
-  let datatype=null;
-  if(selected==1)
-  { 
-    datatype = subcategoryByCategoryList1; 
-  }
-  else if(selected==7)
-  { 
-    datatype = subcategoryByCategoryList7; 
-  }
-  else
-  { 
-    datatype = subcategoryByCategoryList; 
-  }
-  
-  //---------------------- End Subcategory
-   /* ----------------- Get Category Id */
    const findOneCategoryData = () => {
     findOneCategory(id).then(({ data }) => {
       setfindOne(data)
@@ -120,9 +81,6 @@ const AddProductForm = () => {
     
     //console.log("===",findOne)
     useEffect(() => {
-      getSubCategoryByCategoryId()
-      getCategoryData()
-      getSubCategoryData()
       findOneCategoryData()
     }, [])
 
@@ -146,65 +104,17 @@ const AddProductForm = () => {
                     <form className="p-4" onSubmit={handleSubmit}>
                       <Grid container spacing={3}>
                         <Grid item sm={6} xs={12}>
-                        <select onChange={e => setSelected(e.target.value)} style={{ 
-                          padding:"8px",
-                          margin: "0px",
-                          width: "724px" 
-                        }} name='categoryid' 
-                        value={findOne.parent_cat_id}
-                        required> 
-                        <option value={''}>Select Category</option>
-                        {categoryList.map((citem, ind) => (
-                          <option value={citem.id} >{citem.name}</option>
-                          ))}
-                        </select> 
-               
-                            {/*
-                            <TextField
-                                className="min-w-188"
-                                label="Select Category"
-                                name="categoryid"
-                                size="small"
-                                variant="outlined"
-                                select
-                                value={values.categoryid || ''}
-                                onChange={handleChange}
-                                fullWidth
-                                error={Boolean(
-                                    touched.categoryid && errors.categoryid
-                                )}
-                                helperText={touched.categoryid && errors.categoryid}
-                            >
-                                {categoryList.map((item, ind) => (
-                                    <MenuItem value={item.id} key={item.id}>
-                                        {item.name}
-                                    </MenuItem>
-                                ))}
-                            </TextField> */}
+                        <CategoryDropdown onCategoryChange={handleCategoryChange} />
                     </Grid>
                     <Grid item sm={6} xs={12}>
-                            
-                            <TextField
-                                className="min-w-188"
-                                label="Select Sub Category"
-                                name="subcat"
-                                size="small"
-                                variant="outlined"
-                                select
-                                value={values.subcat || findOne.parent_id}
-                                onChange={handleChange}
-                                fullWidth
-                                error={Boolean(
-                                    touched.subcat && errors.subcat
-                                )}
-                                helperText={touched.subcat && errors.subcat}
-                            >
-                                {datatype.map((sitem, ind) => (
-                                    <MenuItem value={sitem.id} key={sitem.id}>
-                                        {sitem.name}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
+                            {selectedCategory && (
+                            <SubcategoryDropdown
+                              category={selectedCategory}
+                              onSubcategoryChange={handleSubcategoryChange}
+                            />
+                          )}
+
+                           
                     </Grid>
                     <Grid item sm={6} xs={12}>
                     <TextField

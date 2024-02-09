@@ -24,3 +24,10 @@ export const findSubCategoryByCategoryId = (id) => {
 export const getAllSubCategory = () => {
     return axios.get('http://localhost:5000/api/v1/subcategory/list')
 }
+export const getProductBySubCategory = (id) => {
+    return axios.get(`http://localhost:5000/api/v1/productbysubcategory/${id}`)
+}
+
+export const getAllVariable = (id) => {
+    return axios.get(`http://localhost:5000/api/v1/variable/list`)
+}

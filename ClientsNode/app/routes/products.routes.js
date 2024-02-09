@@ -11,6 +11,8 @@ module.exports = function(app) {
 
   app.get('/api/v1/product/list', productcontroller.findAll);
   app.get('/api/v1/product/delete/:catId', productcontroller.delete);
+  app.get('/api/v1/productbysubcategory/:sId', productcontroller.findProductBySubcategoryList);
+  app.get('/api/v1/variable/list', productcontroller.getAllVariableList);
   
   
 };

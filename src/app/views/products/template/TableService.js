@@ -3,9 +3,6 @@ import axios from 'axios'
 export const getAllProducts = () => {
     return axios.get('http://localhost:5000/api/v1/product/list')
 }
-export const getAllSubProduct = () => {
-    return axios.get('http://localhost:5000/api/v1/product/list')
-}
 
 export const findOneProduct = (id) => {
     return axios.get(`http://localhost:5000/api/v1/product/list/${id}`)
