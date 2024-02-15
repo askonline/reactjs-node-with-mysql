@@ -10,6 +10,7 @@ module.exports = function(app) {
  
 
   app.get('/api/v1/model/list', modelcontroller.findAll);
+   app.get('/api/v1/model/list/:mId', modelcontroller.findOne);
   app.get('/api/v1/model/delete/:catId', modelcontroller.delete);
   
   

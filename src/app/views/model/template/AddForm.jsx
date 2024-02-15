@@ -119,6 +119,7 @@ const AddModelForm = (props) => {
                         <CategoryDropdown onCategoryChange={handleCategoryChange} />
                     </Grid>
                     <Grid item sm={6} xs={12}>
+                    
                         {selectedCategory && (
                             <SubcategoryDropdown
                               category={selectedCategory}

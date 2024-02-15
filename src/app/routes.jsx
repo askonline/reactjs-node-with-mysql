@@ -9,6 +9,7 @@ import MatxLayout from './components/MatxLayout/MatxLayout';
 import productRoutes from 'app/views/products/ProductRoute';
 import categoryRoutes from 'app/views/category/CategoryRoute';
 import modelRoutes from 'app/views/model/ModelRoute';
+import variableRoutes from 'app/views/variable/VariableRoute'
 
 const routes = [ 
   {
@@ -23,7 +24,8 @@ const routes = [
               ...materialRoutes,
               ...productRoutes,
               ...categoryRoutes,
-              ...modelRoutes
+              ...modelRoutes,
+              ...variableRoutes
             ],
   },
   ...sessionRoutes,

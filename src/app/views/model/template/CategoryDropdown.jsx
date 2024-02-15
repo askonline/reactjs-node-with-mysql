@@ -22,6 +22,12 @@ const CategoryDropdown = (props) => {
     
     }, [])
 
+    const options = categoryList.map((citem , ind) => {
+      return <option 
+                  value={citem.id} 
+                  selected={citem.id === 7}>{citem.name}
+             </option>
+  })
 
   return (
     <div>
@@ -33,9 +39,8 @@ const CategoryDropdown = (props) => {
         }} name='categoryid' 
         required> 
         <option value={'12'}>Select Category</option>
-        {categoryList.map((citem, ind) => (
-          <option value={citem.id} >{citem.name}</option>
-          ))}
+         {options}
+       
         </select> 
         
         

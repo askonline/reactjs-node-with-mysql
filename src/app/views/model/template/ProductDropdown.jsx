@@ -7,7 +7,8 @@ const ProductDropdown = (props) => {
   const [isLoading, setIsLoading] = useState(true);
   const animatedComponents = makeAnimated();
   const [prodeuctsList, setProdeuctsList] = useState([])
-  //console.log("==pp===",props)
+  
+  console.log("===",prodeuctsList)
 
   useEffect(() => {
     getProductBySubCategory(props.subcategory).then(({ data }) => {
@@ -35,7 +36,8 @@ const ProductDropdown = (props) => {
         <Select
         closeMenuOnSelect={false}
         components={animatedComponents}
-        defaultValue={[prodeuctsList[1], prodeuctsList[1]]}
+        //defaultValue={[prodeuctsList[1], prodeuctsList[1]]}
+        value={[prodeuctsList[1],prodeuctsList[2]]}
         isMulti
         options={prodeuctsList}
         name="products[]"

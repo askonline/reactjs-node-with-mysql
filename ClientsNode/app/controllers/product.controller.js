@@ -125,21 +125,6 @@ module.exports.findProductBySubcategoryList = async (request, response, next) =>
     }
 }
 
-//----------------- Get All Variable List
-module.exports.getAllVariableList = async (request, response, next) => {
-    
-    try {
-       sql.query(`SELECT id,variable_name FROM variable_usa WHERE status = '1' ORDER BY variable_name ASC`, (err, res) => {
-            if (err) {
-               response.send({ err,status:false });
-              return;
-            }
-            response.json(res);
-        });
-    } catch (error) {
-        response.status(400).send({ success: false, message: error.message });
-    }
-}
 
 
 

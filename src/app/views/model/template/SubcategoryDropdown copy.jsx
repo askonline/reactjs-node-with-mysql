@@ -16,6 +16,13 @@ const SubcategoryDropdown = (props) => {
     setSelectedSubcategory(event.target.value);
     props.onSubcategoryChange(event.target.value);
   };
+  const subcatoptions = subcategories.map((citem , ind) => {
+    return <option 
+                value={citem.id} 
+                selected={citem.id === 7}>{citem.name}
+           </option>
+})
+
   return (
     <div>
       <select id="subcategory"  onChange={handleSubcategoryChange} style={{ 
@@ -25,9 +32,7 @@ const SubcategoryDropdown = (props) => {
         }} name='subcategoryid' 
         required> 
         <option value={''}>Select Sub Category</option>
-        {subcategories.map((citem, ind) => (
-          <option value={citem.id} >{citem.name}</option>
-          ))}
+          {subcatoptions}
         </select> 
       
     </div>
