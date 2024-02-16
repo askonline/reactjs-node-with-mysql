@@ -1,12 +1,20 @@
 import React, {useEffect, useState } from 'react';
-import { getAllCategory} from './TableService'
+import { findOnemodel,getAllCategory} from './TableService'
+import { useParams } from "react-router-dom";
 
 const CategoryDropdown = (props) => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [categoryList, setCategoryList] = useState([])
-  
+  const { id } = useParams();
+  const [findOne, setfindOne] = useState([])
+
+  const findOneModelData = () => {
+    findOnemodel(id).then(({ data }) => {
+      setfindOne(data)
+    })
+    }
   //console.log("==pp===",props)
-  
+
   const handleCategoryChange = (event) => {
     setSelectedCategory(event.target.value);
     props.onCategoryChange(event.target.value);
@@ -19,15 +27,16 @@ const CategoryDropdown = (props) => {
     }
     useEffect(() => {
       getCategoryData()
+      findOneModelData()
     
     }, [])
 
     const options = categoryList.map((citem , ind) => {
       return <option 
                   value={citem.id} 
-                  selected={citem.id === 7}>{citem.name}
+                  selected={citem.id === findOne.parent_category_id}>{citem.name}
              </option>
-  })
+      })
 
   return (
     <div>
@@ -38,7 +47,7 @@ const CategoryDropdown = (props) => {
           width: "724px" 
         }} name='categoryid' 
         required> 
-        <option value={'12'}>Select Category</option>
+        <option value={''}>Select Category</option>
          {options}
        
         </select> 

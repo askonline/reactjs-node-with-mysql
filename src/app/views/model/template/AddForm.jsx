@@ -76,8 +76,9 @@ const AddModelForm = (props) => {
       variable:'',
       modelno:''
     }
-    
+    let modelno = findOne.model_number;
     //console.log("===",findOne)
+
     useEffect(() => {
       findOneModelData()
       variableData()
@@ -94,6 +95,7 @@ const AddModelForm = (props) => {
       setSelectedProducts(subcategory)
     };
     
+  //console.log(findOne)
     
     return (
         <div className="m-sm-30">
@@ -119,21 +121,28 @@ const AddModelForm = (props) => {
                         <CategoryDropdown onCategoryChange={handleCategoryChange} />
                     </Grid>
                     <Grid item sm={6} xs={12}>
-                    
-                        {selectedCategory && (
+                      <SubcategoryDropdown
+                              category={selectedCategory}
+                              onSubcategoryChange={handleSubcategoryChange}
+                            />
+                       
+                        {/*selectedCategory && (
                             <SubcategoryDropdown
                               category={selectedCategory}
                               onSubcategoryChange={handleSubcategoryChange}
                             />
-                          )}
-                            
+                        )*/}
                     </Grid> 
                     <Grid item sm={6} xs={12}>
-                      {selectedProducts && (
                             <ProductDropdown
                              subcategory={selectedProducts}
                             />
-                          )}
+
+                        {/*selectedProducts && (
+                            <ProductDropdown
+                             subcategory={selectedProducts}
+                            />
+                          )*/}
                    
                     </Grid>
                     
@@ -141,7 +150,7 @@ const AddModelForm = (props) => {
                     <TextField
                         type="text"
                         name="modelno"
-                        value={values.modelno || findOne.model_number}
+                        value={values.modelno || modelno}
                         fullWidth
                         onChange={handleChange}
                         label="Model No"
@@ -151,6 +160,7 @@ const AddModelForm = (props) => {
                         helperText={touched.modelno && errors.modelno}
                     />
                     </Grid>
+                    
                     <Grid item sm={12} xs={12}> <Divider className="mb-6" /><h4>Product Specifications</h4></Grid>
                     <Grid item sm={6} xs={12}>
                         <TextField

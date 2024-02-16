@@ -1,26 +1,27 @@
 import axios from 'axios'
+const apiUrl = process.env.REACT_APP_API_URL;
 
 export const getAllCategory = () => {
-    return axios.get('http://localhost:5000/api/v1/category/list')
+    return axios.get(`${apiUrl}/category/list`)
 }
 export const getAllSubCategory = () => {
-    return axios.get('http://localhost:5000/api/v1/subcategory/list')
+    return axios.get(`${apiUrl}/subcategory/list`)
 }
 
 export const findOneCategory = (id) => {
-    return axios.get(`http://localhost:5000/api/v1/category/list/${id}`)
+    return axios.get(`${apiUrl}/category/list/${id}`)
 }
 
 
 export const deleteCategory = (id) => {
     //console.log('==',id)
-    return axios.get(`http://localhost:5000/api/v1/category/delete/${id}`)
+    return axios.get(`${apiUrl}/category/delete/${id}`)
 }
 export const addCategory = (Category) => {
     //console.log("===",Category)
-    return axios.post('http://localhost:5000/api/v1/category/add', Category)
+    return axios.post(`${apiUrl}/category/add`, Category)
 }
 export const updateCategory = (Category) => {
     //console.log("====",Category)
-    return axios.post(`http://localhost:5000/api/v1/category/update/${Category.id}`, Category)
+    return axios.post(`${apiUrl}/category/update/${Category.id}`, Category)
 }

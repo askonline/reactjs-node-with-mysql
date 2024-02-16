@@ -1,7 +1,6 @@
-import { Stack } from "@mui/material";
-import { Box, styled } from "@mui/system";
+import { Box, styled } from "@mui/material";
 import { Breadcrumb, SimpleCard } from "app/components";
-import AddForm from "./template/AddForm";
+import EventsTable from "./template/EventsList";
 
 const Container = styled("div")(({ theme }) => ({
   margin: "30px",
@@ -12,22 +11,19 @@ const Container = styled("div")(({ theme }) => ({
   },
 }));
 
-const AppForm = () => {
+const AppTable = () => {
   return (
     <Container>
+    
       <Box className="breadcrumb">
-        <Breadcrumb routeSegments={[ { name: 'Model', path: '/model/list' },{ name: 'Model Add' },]} />
+        <Breadcrumb routeSegments={[ { name: 'Events', path: '/events/list' },{ name: 'Events List' },]} />
       </Box>
 
-      <Stack spacing={3}>
-        <SimpleCard title="">
-          <AddForm />
-        </SimpleCard>
-
-        
-      </Stack>
+      <SimpleCard>
+        <EventsTable />
+      </SimpleCard>
     </Container>
   );
 };
 
-export default AppForm;
+export default AppTable;

@@ -16,7 +16,7 @@ const AppForm = () => {
   return (
     <Container>
       <Box className="breadcrumb">
-        <Breadcrumb routeSegments={[ { name: 'Model', path: '/model/list' },{ name: 'Model Add' },]} />
+         <Breadcrumb routeSegments={[ { name: 'Events', path: '/events/list' },{ name: 'Event Add' },]} />
       </Box>
 
       <Stack spacing={3}>

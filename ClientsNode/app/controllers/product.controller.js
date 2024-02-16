@@ -78,7 +78,7 @@ module.exports.findAll = async (request, response, next) => {
 module.exports.findOne = async (request, response, next) => {
     
     try {
-           sql.query(`select *  from category_usa where id=${request.params.catId}`, (err, res) => {
+           sql.query(`select *  from category_usa where id=${request.params.pId}`, (err, res) => {
             if (err) {
                response.send({ err,status:false });
               return;

@@ -34,8 +34,11 @@ require("./app/routes/category.routes")(app);
 require("./app/routes/profile.routes")(app);
 require("./app/routes/products.routes")(app);
 require("./app/routes/model.routes")(app);
-require("./app/routes/latestupdate.routes")(app);
-require("./app/routes/achievements.routes")(app);
+require("./app/routes/variable.routes")(app);
+require("./app/routes/events.routes")(app);
+
+//require("./app/routes/latestupdate.routes")(app);
+//require("./app/routes/achievements.routes")(app);
 
 // set port, listen for requests
 

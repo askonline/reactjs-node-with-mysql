@@ -18,7 +18,7 @@ import {
   import { useEffect, useState } from "react";
   import { Link } from "react-router-dom";
   
-  import { findOneCategory,addCategory,updateCategory} from './TableService'
+  import { findOneProduct,addCategory,updateCategory} from './TableService'
   import * as yup from 'yup'
   import { useParams,useNavigate } from "react-router-dom";
   import 'react-responsive-select/dist/react-responsive-select.css';
@@ -43,10 +43,22 @@ const AddProductForm = () => {
   };
  
 
-   const findOneCategoryData = () => {
-    findOneCategory(id).then(({ data }) => {
+   const findOneData = () => {
+    findOneProduct(id).then(({ data }) => {
       setfindOne(data)
     })
+    }
+    useEffect(() => {
+      findOneData()
+    }, [])
+    const initialValues = {
+      categoryid:'',
+      subcat: '',
+      projectname:'',
+      url:'',
+      feature_highlight:'',
+      datasheetno:'',
+      datasheetrevno:''
     }
 
     const handleSubmit = async (values, { isSubmitting }) => {
@@ -66,24 +78,9 @@ const AddProductForm = () => {
             setState({ parent_id:'',name: '', status: '' });
             navigate('/subcategory/list');*/
     }
-
-  
-
-    const initialValues = {
-      categoryid:'',
-      subcat: '',
-      projectname:'',
-      url:'',
-      feature_highlight:'',
-      datasheetno:'',
-      datasheetrevno:''
-    }
     
-    //console.log("===",findOne)
-    useEffect(() => {
-      findOneCategoryData()
-    }, [])
-
+    console.log("===",findOne)
+   
     return (
         <div className="m-sm-30">
                 
@@ -107,12 +104,12 @@ const AddProductForm = () => {
                         <CategoryDropdown onCategoryChange={handleCategoryChange} />
                     </Grid>
                     <Grid item sm={6} xs={12}>
-                            {selectedCategory && (
+                          
                             <SubcategoryDropdown
                               category={selectedCategory}
                               onSubcategoryChange={handleSubcategoryChange}
                             />
-                          )}
+                          
 
                            
                     </Grid>

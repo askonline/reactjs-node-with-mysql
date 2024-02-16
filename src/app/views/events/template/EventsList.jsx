@@ -8,7 +8,7 @@ import {
   import { TextValidator, ValidatorForm } from "react-material-ui-form-validator";
   import { Link } from "react-router-dom";
   import { makeStyles } from '@material-ui/core/styles'
-  import { getAllVariable,deleteVariable} from './TableService'
+  import { getAllEvents,deleteEvents} from './TableService'
   import MUIDataTable from 'mui-datatables'
   import { useNavigate } from "react-router-dom";
   import {  ConfirmationDialog } from 'app/components'
@@ -19,8 +19,8 @@ import {
   }));
 
   const EditForm = () => {
-    const [variableList, setVariableList] = useState([])
-    const [variable, setVariable] = useState(null)
+    const [EventsList, setEventsList] = useState([])
+    const [Events, setEvents] = useState(null)
     const navigate = useNavigate();
     const [
         shouldOpenConfirmationDialog,
@@ -29,8 +29,22 @@ import {
     
     const columns = [
         {
-            name: 'variable_name', // field name in the row object
-            label: 'Variable', // column title that will be shown in table
+            name: 'name', // field name in the row object
+            label: 'Event', // column title that will be shown in table
+            options: {
+                filter: true,
+            },
+        },
+        {
+            name: 'from_date', // field name in the row object
+            label: 'From Date', // column title that will be shown in table
+            options: {
+                filter: true,
+            },
+        },
+        {
+            name: 'to_date', // field name in the row object
+            label: 'To Date', // column title that will be shown in table
             options: {
                 filter: true,
             },
@@ -41,7 +55,7 @@ import {
             options: {
                 filter: true,
                 customBodyRenderLite: (dataIndex) => {
-                    let getStatus = variableList[dataIndex].status
+                    let getStatus = EventsList[dataIndex].status
                     if (getStatus == '1')
                         return (
                             <small className="text-white bg-error border-radius-4 px-2 py-2px">
@@ -66,11 +80,11 @@ import {
                 customBodyRenderLite: (dataIndex) => (
                     <div className="flex items-center">
                       <div className="flex-grow"></div>
-                    <Link to={`/variable/edit/${variableList[dataIndex].id}`}> <Icon fontSize="" color="primary" title="Edit">edit</Icon></Link>
+                    <Link to={`/events/edit/${EventsList[dataIndex].id}`}> <Icon fontSize="" color="primary" title="Edit">edit</Icon></Link>
                     
                    
                     <Button  type="submit" 
-                    onClick={() => handleDelete(variableList[dataIndex].id)} >
+                    onClick={() => handleDelete(EventsList[dataIndex].id)} >
                          <Icon fontSize="" color="error" title="Delete">delete</Icon>
                     </Button>
 
@@ -90,14 +104,14 @@ import {
        
     }
 
-    const handleDelete = (variable) => {
+    const handleDelete = (Events) => {
         //console.log('delete',id)
-        setVariable(variable)
+        setEvents(Events)
         setShouldOpenConfirmationDialog(true)
         //navigate('/product/list');
        };
        const handleConfirmationResponse = () => {
-        deleteVariable(variable).then(() => {
+        deleteEvents(Events).then(() => {
             handleDialogClose()
             
         })
@@ -105,19 +119,19 @@ import {
    
     /* const handleDelete = (id) => {
         //console.log('delete',id)
-        deleteVariable(id)
-        navigate('/variable/list');
+        deleteEvents(id)
+        navigate('/Events/list');
        };*/
 
-    /* ----------------- Get Variable Id */
-    const getVariableData = () => {
-        getAllVariable().then(({ data }) => {
-            setVariableList(data)
+    /* ----------------- Get Events Id */
+    const getEventsData = () => {
+        getAllEvents().then(({ data }) => {
+            setEventsList(data)
         })
         }
     
         useEffect(() => {
-            getVariableData()
+            getEventsData()
         }, [])
     
   
@@ -136,8 +150,8 @@ import {
     return (
       <div>
         <MUIDataTable
-                title={ <h3> <Link to="/variable/add" > <Icon fontSize="large" title="Add New">add</Icon></Link></h3> }
-                data={variableList}
+                title={ <h3> <Link to="/events/add" > <Icon fontSize="large" title="Add New">add</Icon></Link></h3> }
+                data={EventsList}
                 columns={columns}
                 options={{
                     filterType: 'textField',

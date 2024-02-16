@@ -7,6 +7,7 @@ import { SettingsProvider } from './contexts/SettingsContext';
 import { Store } from './redux/Store';
 import routes from './routes';
 
+
 const App = () => {
   const content = useRoutes(routes);
 

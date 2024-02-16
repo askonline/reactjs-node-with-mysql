@@ -10,6 +10,7 @@ import productRoutes from 'app/views/products/ProductRoute';
 import categoryRoutes from 'app/views/category/CategoryRoute';
 import modelRoutes from 'app/views/model/ModelRoute';
 import variableRoutes from 'app/views/variable/VariableRoute'
+import eventsRoutes from 'app/views/events/EventsRoute'
 
 const routes = [ 
   {
@@ -25,7 +26,8 @@ const routes = [
               ...productRoutes,
               ...categoryRoutes,
               ...modelRoutes,
-              ...variableRoutes
+              ...variableRoutes,
+              ...eventsRoutes
             ],
   },
   ...sessionRoutes,

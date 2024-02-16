@@ -1,38 +1,70 @@
 import React, { useState, useEffect } from 'react';
 import makeAnimated from 'react-select/animated';
 import Select from 'react-select'
-import { getProductBySubCategory} from './TableService'
+import { findOnemodel,getProductBySubCategory} from './TableService'
+import { useParams } from "react-router-dom";
+
+
 
 const ProductDropdown = (props) => {
   const [isLoading, setIsLoading] = useState(true);
   const animatedComponents = makeAnimated();
   const [prodeuctsList, setProdeuctsList] = useState([])
   
-  console.log("===",prodeuctsList)
+  const { id } = useParams();
+  const [findOne, setfindOne] = useState([])
+  
+  const findOneModelData = () => {
+    findOnemodel(id).then(({ data }) => {
+      setfindOne(data)
+    })
+    }
+  useEffect(() => {
+    findOneModelData()
+  
+  }, [])
+
+  //console.log("===",findOne)
 
   useEffect(() => {
-    getProductBySubCategory(props.subcategory).then(({ data }) => {
-      setProdeuctsList(data)
-    })
+    if(id)
+    {
+      getProductBySubCategory(119).then(({ data }) => {
+        setProdeuctsList(data)
+      })
+    }
+    if(props.subcategory)
+    {
+      getProductBySubCategory(props.subcategory).then(({ data }) => {
+        setProdeuctsList(data)
+      })
+    }
 }, [props.subcategory])
 
-  
+
+
+const productsoptions = prodeuctsList.map((citem , ind) => {
+  return <option 
+              value={citem.value} 
+              selected={citem.value === Number(findOne.sub_category_id)}>{citem.label}
+         </option>
+  })
+
   return (
     <div>
-      {/*
-      <select id="products"  onChange={handleProductsChange} style={{ 
+      
+      <select id="products"  style={{ 
           padding:"8px",
           margin: "0px",
           width: "724px" 
         }} name='projectname' 
-        value={selectedSubcategory}
         multiple
-        required> 
+        > 
         <option value={''}>Select Products</option>
-        {subcategories.map((citem, ind) => (
-          <option value={citem.id} >{citem.name}</option>
-          ))}
-        </select> */}
+        {productsoptions}
+        </select> 
+
+        {/*
         <Select
         closeMenuOnSelect={false}
         components={animatedComponents}
@@ -41,8 +73,8 @@ const ProductDropdown = (props) => {
         isMulti
         options={prodeuctsList}
         name="products[]"
-        
       /> 
+      */}
     </div>
   );
 };
