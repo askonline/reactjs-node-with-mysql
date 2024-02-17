@@ -1,15 +1,14 @@
 const db = require("../models");
-const Products = db.products;
+const Events = db.events;
 const sql = require("../config/db");
 
 
 module.exports.addEvents = async (request, response, next) => {
     try {
-       
-        if (!request.body.variable_name) {
-            response.status(400).send({ message: "Variable name content can not be empty",status:false });
-            return;
-          }
+        
+      
+        console.log("==--",request.body)
+
         sql.query("INSERT INTO event_usa SET ?", request.body, (err, res) => {
             if (err) {
                response.send({ message: "Event not added!!",status:false });

@@ -1,5 +1,6 @@
 const profilecontroller = require("../controllers/profile.controller");
 const multermiddleware = require("../multer/profile");
+
 module.exports = function(app) {
   app.use(function(req, res, next) {
     res.header(

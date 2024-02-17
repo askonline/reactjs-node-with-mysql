@@ -1,192 +1,204 @@
-import { DatePicker } from "@mui/lab";
-import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import React from 'react'
+import { Formik } from 'formik'
+
 import {
-  Button,
-  Grid,
-  Icon,
-  styled,
+    TextField,
+    Button,
+    Grid,
+    Icon,
+   
+    
+  } from "@mui/material";
+  import DatePicker from "react-datepicker";
 
-} from "@mui/material";
-import { Span } from "app/components/Typography";
-import { useEffect, useState } from "react";
-import { TextValidator, ValidatorForm } from "react-material-ui-form-validator";
-import { Link } from "react-router-dom";
-import { SimpleCard } from 'app/components'
-import { makeStyles } from '@material-ui/core/styles'
-import { findOneEvents,addEvents,updateEvents } from './TableService'
-import { useParams,useNavigate } from "react-router-dom";
-import LocalizationProvider from "@mui/lab/LocalizationProvider";
+  import "react-datepicker/dist/react-datepicker.css";
+
+  import { Span } from "app/components/Typography";
+
+  import { useEffect, useState } from "react";
+  import { Link } from "react-router-dom";
+  
+  import { findOneEvents,addEvents,updateEvents } from './TableService'
+  import * as yup from 'yup'
+  import { useParams,useNavigate } from "react-router-dom";
+  import 'react-responsive-select/dist/react-responsive-select.css';
 
 
-const TextField = styled(TextValidator)(() => ({
-  width: "100%",
-  marginBottom: "16px",
-  }));
-
-  const AddForm = () => {
+const AddProductForm = () => {
   const [findOne, setfindOne] = useState([])
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const handleFromDateChange = (date) => setState({ ...state, date });
-  const handleToDateChange = (to_date) => setState({ ...state, date });
+    const initialValues = {
+      name: '',
+      description:'',
+      from_date:'',
+      to_date:'',
+      status:'1',
+    }
+    const findOneEventsData = () => {
+      findOneEvents(id).then(({ data }) => {
+        setfindOne(data)
+      })
+      }
   
-  const [state, setState] = useState({
-    name: '',
-    description:'',
-    image:'',
-    from_date:'',
-    to_date:'',
-    status:'1',
+      useEffect(() => {
+        findOneEventsData()
+      }, [])
+
+      const [imageFile, setImageFile] = useState(null)
+    
+      const fileHandler = (e) => {
+        setImageFile(e.target.files[0])
         
-    })
-  const {
-        name,
-        description,
-        date,
-        to_date,
-        status,
-      } = state;
-
-  /* ----------------- Get Category Id */
-  const findOneEventsData = () => {
-    findOneEvents(id).then(({ data }) => {
-      setfindOne(data)
-    })
+      }
+      
+    const handleSubmit = async (values, { isSubmitting }) => {
+       
+        //const formData = {name:values.name,description:values.description,image1: file }
+        /*var formData = new FormData();
+        formData.append('name', values.name);
+        formData.append('description', values.description);
+        formData.append('from_date', values.from_date);
+        formData.append('to_date', values.to_date);
+        formData.append('status', values.status);
+        formData.append('image', imageFile.name);
+       formData.append('eventimage', imageFile);
+        console.log("==",formData)
+        for (var key of formData.entries()) 
+          {
+              console.log(key[0] + ', ' + key[1])
+          }*/
+        addEvents({
+            ...values,image:imageFile.name,
+              })
+          
+            /* if (id) {
+                updateCategory({id,
+                    ...values,
+                })
+            } else {
+                addCategory({
+                    ...values,
+                })
+            }
+        
+            setState({ parent_id:'',name: '', status: '' });
+            navigate('/subcategory/list');*/
     }
-
-    useEffect(() => {
-      findOneEventsData()
-    }, [])
     
+    //console.log("===",findOne)
    
-    //console.log(findOne)
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    //console.log("submitted",event);
-    if (id) {
-      updateEvents({id,
-            ...state,
-        })
-    } else {
-      addEvents({
-            ...state,
-        })
-    }
-    setState({ Events_name: '', status: '' });
-    navigate('/events/list');
-    
-  };
-
-  const handleChange = (event) => {
-    event.persist();
-    setState({ ...state, [event.target.name]: event.target.value });
-  };
-
-  const useStyles = makeStyles((theme) => ({
-    button: {
-        margin: theme.spacing(1),
-    },
-    input: {
-        display: 'none',
-    },
-}))
-  const classes = useStyles()
-  
-  let eventName=(findOne.name)?findOne.name:"";
-  
-
-  return (
-    <div>
-     
-      <ValidatorForm onSubmit={handleSubmit} onError={() => null}>
-        <Grid container spacing={1}>
-          <Grid item lg={12} md={6} >
-            <TextField
-              type="text"
-              name="name"
-              id="standard-basic"
-              value={name || eventName}
-              onChange={handleChange}
-              errorMessages={["this field is required"]}
-              label="Events (Min length 3)"
-              validators={["required", "minStringLength: 3", "maxStringLength: 500"]}
-            />
-            </Grid>
-            <Grid item sm={12} xs={12}>
-            <TextField
-              type="text"
-              name="description"
-              id="standard-basic-description"
-              rows={4}
-              multiline
-              value={description || findOne.description}
-              onChange={handleChange}
-              errorMessages={["this field is required"]}
-              label="Description"
-              //validators={["required", "minStringLength: 3", "maxStringLength: 500"]}
-            />
-            
-            </Grid>
-            <Grid item sm={6} xs={12}>
-                  <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <DatePicker
-                    value={date}
-                    onChange={handleFromDateChange}
-                    renderInput={(props) => (
-                      <TextField
-                        {...props}
-                        label="From Date"
-                        id="mui-pickers-datefrom"
-                        sx={{ mb: 2, width: "100%" }}
-                      />
-                    )}
-                  />
-                </LocalizationProvider>
-              </Grid>
-              <Grid item sm={6} xs={12}>
-                  <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <DatePicker
-                    value={date}
-                    onChange={handleToDateChange}
-                    renderInput={(props) => (
-                      <TextField
-                        {...props}
-                        label="To Date"
-                        id="mui-pickers-dateto"
-                        sx={{ mb: 2, width: "100%" }}
-                      />
-                    )}
-                  />
-                </LocalizationProvider>
-              </Grid>
-            <Grid item sm={12} xs={12}>
-              <h4>Feature Image</h4>
-                <input type="file" 
-                  
-                  />   
+    return (
+        <div className="m-sm-30">
+                
+                <Formik
+                    initialValues={initialValues}
+                    onSubmit={handleSubmit}
+                    enableReinitialize={true}
+                    validationSchema={subCategorySchema}
+                >
+                    {({
+                        values,
+                        errors,
+                        touched,
+                        handleChange,
+                        handleSubmit,
+                        setFieldValue,
+                    }) => (
+                    <form className="p-4" onSubmit={handleSubmit}>
+                    <Grid container spacing={3}>
+                       
+                    <Grid item sm={6} xs={12}>
+                    <TextField
+                        type="text"
+                        name="name"
+                        id="standard-basic"
+                        value={values.name || ''}
+                        fullWidth
+                        onChange={handleChange}
+                        label="Event Title"
+                        error={Boolean(
+                            touched.name && errors.name
+                        )}
+                        helperText={touched.name && errors.name}
+                    />
+                    </Grid>
+                    <Grid item sm={12} xs={12}>
+                          <TextField
+                              label="Description"
+                              name="description"
+                              size="small"
+                              variant="outlined"
+                              multiline
+                              rows={4}
+                              fullWidth
+                              value={values.description || ''}
+                              onChange={handleChange}
+                              error={Boolean(
+                                touched.description && errors.description
+                            )}
+                            helperText={touched.description && errors.description}
+                          />
+                      </Grid>
+                      <Grid item sm={3} xs={12}>
+                           <h3>From Date</h3>     
+                          <DatePicker
+                          showIcon
+                          selected={startDate}
+                          onChange={(date) => setStartDate(date)}
+                          name="from_data"
+                          value={values.from_data || startDate}
+                        />        
+                        
+                      </Grid>
+                      <Grid item sm={3} xs={12}>
+                        <h3>To Date</h3>     
+                            <DatePicker
+                            showIcon
+                            selected={endDate}
+                            onChange={(date) => setEndDate(date)}
+                            name="to_date"
+                            value={values.to_date || endDate}
+                          />        
+                      </Grid>
+                      <Grid item sm={6} xs={12}>
+                        <h4>Image</h4>
+                        <input type="file" onChange={fileHandler} />
+                         
+                            
+                        </Grid>
                     
-              </Grid>
-              
-            
-        </Grid>
-        <SimpleCard>
-        <Button color="primary" variant="contained" type="submit" className={classes.button}>
-          <Icon>send</Icon>
-          <Span sx={{ pl: 1, textTransform: "capitalize" }}>Submit</Span>
-        </Button>
 
-        <Link to={'/Events/list'}>
-        <Button color="primary" variant="contained" type="submit" className={classes.button}>
-          <Icon>send</Icon>
-          <Span sx={{ pl: 1, textTransform: "capitalize" }}>Back</Span>
-        </Button>
-        </Link>
-        </SimpleCard>
 
-      </ValidatorForm>
-    </div>
-  );
-};
-export default AddForm;
+                    <Grid item sm={12} xs={12}>
+                        <Button color="primary" variant="contained" type="submit" >
+                            <Icon>send</Icon>
+                            <Span sx={{ pl: 1, textTransform: "capitalize" }}>Submit</Span> 
+                        </Button>
+                        <Link to={'/subcategory/list'}>
+                       
+                        </Link>
+                    </Grid>
+                   
+                    </Grid>
+                    
+                    </form>
+                    )}
+                </Formik>
+          
+        </div>
+    )
+}
+
+const subCategorySchema = yup.object().shape({
+   //name: yup.string().required('Event title is required'),
+    //description: yup.string().required('Description field is required'),
+  
+    
+})
+
+
+export default AddProductForm

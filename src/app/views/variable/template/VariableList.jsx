@@ -2,26 +2,18 @@
 import {
     Button,
     Icon,
-    styled,
   } from "@mui/material";
   import { useEffect, useState } from "react";
-  import { TextValidator, ValidatorForm } from "react-material-ui-form-validator";
   import { Link } from "react-router-dom";
-  import { makeStyles } from '@material-ui/core/styles'
   import { getAllVariable,deleteVariable} from './TableService'
   import MUIDataTable from 'mui-datatables'
-  import { useNavigate } from "react-router-dom";
+  
   import {  ConfirmationDialog } from 'app/components'
   
-  const TextField = styled(TextValidator)(() => ({
-    width: "100%",
-    marginBottom: "16px",
-  }));
-
-  const EditForm = () => {
+    const EditForm = () => {
     const [variableList, setVariableList] = useState([])
     const [variable, setVariable] = useState(null)
-    const navigate = useNavigate();
+  
     const [
         shouldOpenConfirmationDialog,
         setShouldOpenConfirmationDialog,
@@ -42,7 +34,7 @@ import {
                 filter: true,
                 customBodyRenderLite: (dataIndex) => {
                     let getStatus = variableList[dataIndex].status
-                    if (getStatus == '1')
+                    if (getStatus === '1')
                         return (
                             <small className="text-white bg-error border-radius-4 px-2 py-2px">
                                 Active
@@ -122,15 +114,7 @@ import {
     
   
   
-    const useStyles = makeStyles((theme) => ({
-      button: {
-          margin: theme.spacing(1),
-      },
-      input: {
-          display: 'none',
-      },
-  }))
-    const classes = useStyles()
+
   
   
     return (

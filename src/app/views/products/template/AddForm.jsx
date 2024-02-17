@@ -79,7 +79,7 @@ const AddProductForm = () => {
             navigate('/subcategory/list');*/
     }
     
-    console.log("===",findOne)
+    //console.log("===",findOne)
    
     return (
         <div className="m-sm-30">
@@ -529,12 +529,13 @@ const AddProductForm = () => {
 
 const subCategorySchema = yup.object().shape({
 //    categoryid: yup.number().required('Category is required'),
-   subcat: yup.number().required('Select Subcategory is required'),
+   /*subcat: yup.number().required('Select Subcategory is required'),
     projectname: yup.string().required('Prodect name is required'),
     url: yup.string().required('URL is required'),
     feature_highlight: yup.string().required('Feature highlight is required'),
     datasheetno: yup.string().required('Data sheet no is required'),
     datasheetrevno: yup.string().required('Data sheet revison no is required'),
+    */
     //status: yup.number().required('Status is required'),
     
 })
