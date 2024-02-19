@@ -58,9 +58,8 @@ const AddModelForm = (props) => {
                     ...values,
                 })
             }
-        
-            setState({ parent_id:'',name: '', status: '' });
-            navigate('/subcategory/list');*/
+          */
+            navigate('/model/list');
     }
 
   

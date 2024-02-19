@@ -19,5 +19,5 @@ export const addEvents = (events) => {
 }
 export const updateEvents = (events) => {
     //console.log("====",events)
-    return axios.post(`${apiUrl}/Events/update/${events.id}`, events)
+    return axios.post(`${apiUrl}/events/update/${events.id}`, events)
 }

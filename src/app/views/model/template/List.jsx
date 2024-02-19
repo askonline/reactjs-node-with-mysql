@@ -35,7 +35,7 @@ import {
             },
         },
         {
-            name: 'parent_id', // field name in the row object
+            name: 'child_sub_category_id', // field name in the row object
             label: 'Sub Category', // column title that will be shown in table
             options: {
                 filter: true,

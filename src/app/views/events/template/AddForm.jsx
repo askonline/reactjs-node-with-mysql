@@ -6,7 +6,7 @@ import {
     Button,
     Grid,
     Icon,
-   
+    Avatar
     
   } from "@mui/material";
   import DatePicker from "react-datepicker";
@@ -22,7 +22,8 @@ import {
   import * as yup from 'yup'
   import { useParams,useNavigate } from "react-router-dom";
   import 'react-responsive-select/dist/react-responsive-select.css';
-
+  import axios from 'axios'
+  const apiUrl = process.env.REACT_APP_API_URL;
 
 const AddProductForm = () => {
   const [findOne, setfindOne] = useState([])
@@ -54,39 +55,36 @@ const AddProductForm = () => {
         setImageFile(e.target.files[0])
         
       }
-      
+      const startDateFinal=(findOne.from_date)?findOne.from_date:startDate;
+      const endDateFinal =(findOne.to_date)?findOne.to_date:endDate;
+      //const enventImage = (findOne.image)?findOne.image:imageFile.name;
+
+
     const handleSubmit = async (values, { isSubmitting }) => {
-       
-        //const formData = {name:values.name,description:values.description,image1: file }
-        /*var formData = new FormData();
-        formData.append('name', values.name);
-        formData.append('description', values.description);
-        formData.append('from_date', values.from_date);
-        formData.append('to_date', values.to_date);
-        formData.append('status', values.status);
-        formData.append('image', imageFile.name);
-       formData.append('eventimage', imageFile);
-        console.log("==",formData)
-        for (var key of formData.entries()) 
-          {
-              console.log(key[0] + ', ' + key[1])
-          }*/
-        addEvents({
-            ...values,image:imageFile.name,
-              })
-          
-            /* if (id) {
-                updateCategory({id,
-                    ...values,
-                })
-            } else {
-                addCategory({
-                    ...values,
-                })
-            }
+        var data = new FormData();
+        data.append('name', values.name);
+        data.append('description', values.description);
+        data.append('from_date', startDateFinal);
+        data.append('to_date', endDateFinal);
+        data.append('status', values.status);
+        data.append('image', imageFile.name);
+        data.append('eventimage', imageFile);
         
-            setState({ parent_id:'',name: '', status: '' });
-            navigate('/subcategory/list');*/
+        if (id) {
+        axios.post(`${apiUrl}/events/update/${id}`, data)
+        .then((res) => {
+          this.setState({ events: [res.data] });
+        });
+        
+        } else {
+
+          axios.post(`${apiUrl}/events/add`, data)
+          .then((res) => {
+            this.setState({ events: [res.data] });
+          });
+          
+        }
+        navigate('/events/list');
     }
     
     //console.log("===",findOne)
@@ -116,7 +114,7 @@ const AddProductForm = () => {
                         type="text"
                         name="name"
                         id="standard-basic"
-                        value={values.name || ''}
+                        value={values.name || findOne.name}
                         fullWidth
                         onChange={handleChange}
                         label="Event Title"
@@ -135,7 +133,7 @@ const AddProductForm = () => {
                               multiline
                               rows={4}
                               fullWidth
-                              value={values.description || ''}
+                              value={values.description || findOne.description}
                               onChange={handleChange}
                               error={Boolean(
                                 touched.description && errors.description
@@ -147,10 +145,12 @@ const AddProductForm = () => {
                            <h3>From Date</h3>     
                           <DatePicker
                           showIcon
-                          selected={startDate}
+                          selected={startDateFinal}
                           onChange={(date) => setStartDate(date)}
                           name="from_data"
-                          value={values.from_data || startDate}
+                          value={values.from_data || startDateFinal}
+                          dateFormat="yyyy/MM/dd"
+                          
                         />        
                         
                       </Grid>
@@ -158,17 +158,20 @@ const AddProductForm = () => {
                         <h3>To Date</h3>     
                             <DatePicker
                             showIcon
-                            selected={endDate}
+                            selected={endDateFinal}
                             onChange={(date) => setEndDate(date)}
                             name="to_date"
-                            value={values.to_date || endDate}
+                            value={values.to_date || endDateFinal}
+                            dateFormat="yyyy/MM/dd"
                           />        
                       </Grid>
                       <Grid item sm={6} xs={12}>
                         <h4>Image</h4>
                         <input type="file" onChange={fileHandler} />
-                         
-                            
+                        {findOne.image && (
+                          <img src={`https://akoninc.com/demo/assets/uploads/thumbs/event/${findOne.image}`} />
+                        )}
+                        
                         </Grid>
                     
 
@@ -194,8 +197,8 @@ const AddProductForm = () => {
 }
 
 const subCategorySchema = yup.object().shape({
-   //name: yup.string().required('Event title is required'),
-    //description: yup.string().required('Description field is required'),
+   name: yup.string().required('Event title is required'),
+   description: yup.string().required('Description field is required'),
   
     
 })

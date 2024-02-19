@@ -7,7 +7,7 @@ module.exports.addEvents = async (request, response, next) => {
     try {
         
       
-        console.log("==--",request.body)
+        //console.log("==--",request.body)
 
         sql.query("INSERT INTO event_usa SET ?", request.body, (err, res) => {
             if (err) {
@@ -27,6 +27,8 @@ module.exports.addEvents = async (request, response, next) => {
 
 module.exports.updateEvents = async (request, response, next) => {
     try {
+        
+        //console.log("==--",request.body)
 
         sql.query(`select *  from event_usa where id=${request.params.eId}`, (err, res) => {
             if (err) {
@@ -35,8 +37,8 @@ module.exports.updateEvents = async (request, response, next) => {
             }
             if(res!='')
             {
-                if (!request.body.variable_name) {
-                 response.status(400).send({ message: "Variable variable name content can not be empty",status:false });
+                if (!request.body.name) {
+                 response.status(400).send({ message: "Event name content can not be empty",status:false });
                     return;
                   }
                 sql.query(`UPDATE event_usa SET ? where id=${request.params.eId}`, request.body, (err, res) => {
@@ -44,12 +46,13 @@ module.exports.updateEvents = async (request, response, next) => {
                        response.send({ err,status:false });
                       return;
                     }
-                    response.send({ message: "Variable has been  update successfully!!",status:true });
+                   
+                    response.send({ message: "Event has been  update successfully!!",status:true });
                 });
             }
             else
             {
-                response.send({ message: "Variable not found!!",status:false });
+                response.send({ message: "Event not found!!",status:false });
             }
             
         });

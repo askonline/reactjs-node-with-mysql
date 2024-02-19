@@ -10,12 +10,12 @@ module.exports = function(app) {
     next();
   });
   
-  //app.post('/api/v1/events/add',multermiddleware.single('eventimage'),eventscontroller.addEvents);
-  app.post("/api/v1/events/add",eventscontroller.addEvents);
+  app.post('/api/v1/events/add',multermiddleware.single('eventimage'),eventscontroller.addEvents);
+  //app.post("/api/v1/events/add",eventscontroller.addEvents);
   app.get('/api/v1/events/list', eventscontroller.eventsList);
   app.get('/api/v1/events/delete/:eId', eventscontroller.delete);
   app.get('/api/v1/events/list/:eId', eventscontroller.findOne);
-  app.post('/api/v1/events/update/:eId', eventscontroller.updateEvents);
+  app.post('/api/v1/events/update/:eId',multermiddleware.single('eventimage'),eventscontroller.updateEvents);
 
   
   

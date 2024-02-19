@@ -60,11 +60,13 @@ const AddProductForm = () => {
       datasheetno:'',
       datasheetrevno:''
     }
+  
 
     const handleSubmit = async (values, { isSubmitting }) => {
-        console.log("==",values)
-        const formData = new FormData();
-       
+        const data = new FormData();
+        data.append('name',values.projectname)
+        data.append('image',values.featureImage)
+        
             /* if (id) {
                 updateCategory({id,
                     ...values,
